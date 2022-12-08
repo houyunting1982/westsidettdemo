@@ -28,7 +28,7 @@ const Displayer = ({ totalCamera }) => {
     const [intervalId, setIntervalId] = useState(0);
     const [currentClip, setCurrentClip] = useState({
         currentFrame: 0,
-        currentCamera: 1
+        currentCamera: 0
     });
     const parsedTotalCamera = parseInt(totalCamera)
     const cameraMax = parsedTotalCamera > 24 ? 24 : parsedTotalCamera;
@@ -53,7 +53,7 @@ const Displayer = ({ totalCamera }) => {
             if (isCancelled) {
                 return;
             }
-            console.log("Loaded");
+            console.log("All pictures are loaded");
             setImagesPreloaded(true);
         }
 
@@ -79,20 +79,20 @@ const Displayer = ({ totalCamera }) => {
     const preCamera = () => {
         setCurrentClip(prev => ({
             ...prev,
-            currentCamera: prev.currentCamera === 1 ? cameraMax : prev.currentCamera - 1,
+            currentCamera: prev.currentCamera === 0 ? cameraMax - 1 : prev.currentCamera - 1,
         }));
     }
     const nextCamera = () => {
         setCurrentClip(prev => ({
             ...prev,
-            currentCamera: prev.currentCamera === cameraMax ? 1 : prev.currentCamera + 1,
+            currentCamera: prev.currentCamera === cameraMax ? 0 : prev.currentCamera + 1,
         }));
     }
 
-    const nextView = () => {
+    const nextView = (base = 1) => {
         setCurrentClip(prev => ({
-            currentCamera: (Math.floor(prev.currentFrame / 8)) % cameraMax + 1,
-            currentFrame: prev.currentFrame === frameMax ? frameMax : prev.currentFrame + 1,
+            currentCamera: (Math.floor(prev.currentFrame / 8) + base) % (cameraMax),
+            currentFrame: prev.currentFrame === frameMax ? 0 : prev.currentFrame + 1,
         }));
     }
     const handleOnWheel = (e) => {
@@ -128,12 +128,12 @@ const Displayer = ({ totalCamera }) => {
     useEffect(() => {
         // attach the event listener
         document.addEventListener('keydown', handleKeyPress);
-
         // remove the event listener
         return () => {
             document.removeEventListener('keydown', handleKeyPress);
         };
     }, [handleKeyPress]);
+
     useEffect(() => {
         if (currentClip.currentFrame === frameMax && intervalId) {
             clearInterval(intervalId);
@@ -147,11 +147,11 @@ const Displayer = ({ totalCamera }) => {
             setIntervalId(0);
             return;
         }
-        setCurrentClip({
-            currentCamera: 1,
+        setCurrentClip(prev => ({
+            ...prev,
             currentFrame: 0
-        })
-        const newIntervalId = setInterval(nextView, 100);
+        }))
+        const newIntervalId = setInterval(() => nextView(currentClip.currentCamera), 100);
         setIntervalId(newIntervalId);
     }
 
