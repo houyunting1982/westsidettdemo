@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/westsidettdemo/static/css/main.073c9b0a.css",
-    "main.js": "/westsidettdemo/static/js/main.8b9f98ba.js",
-    "index.html": "/westsidettdemo/index.html",
-    "main.073c9b0a.css.map": "/westsidettdemo/static/css/main.073c9b0a.css.map",
-    "main.8b9f98ba.js.map": "/westsidettdemo/static/js/main.8b9f98ba.js.map"
+    "main.css": "/static/css/main.073c9b0a.css",
+    "main.js": "/static/js/main.1329482f.js",
+    "index.html": "/index.html",
+    "main.073c9b0a.css.map": "/static/css/main.073c9b0a.css.map",
+    "main.1329482f.js.map": "/static/js/main.1329482f.js.map"
   },
   "entrypoints": [
     "static/css/main.073c9b0a.css",
-    "static/js/main.8b9f98ba.js"
+    "static/js/main.1329482f.js"
   ]
 }
