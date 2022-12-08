@@ -10,7 +10,7 @@ function useQuery() {
 
 function App() {
     const query = useQuery();
-    const totalCamera = query.get("totalCamera") || 2
+    const totalCamera = query.get("totalCamera") || 24
     return (
         <div className="App">
             <Displayer totalCamera={totalCamera} />

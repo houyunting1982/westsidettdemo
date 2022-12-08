@@ -8,6 +8,7 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import CropOriginalIcon from '@mui/icons-material/CropOriginal';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 
 function preloadImage(src) {
     return new Promise((resolve, reject) => {
@@ -183,7 +184,7 @@ const Displayer = ({ totalCamera }) => {
                     <ArrowForwardIosIcon />
                 </Button>
                 <Button variant={intervalId ? "contained" : "outlined"} color="success" onClick={handleView}>
-                    360 shots
+                    <PlayCircleOutlineIcon />
                 </Button>
             </Stack>
         </>
