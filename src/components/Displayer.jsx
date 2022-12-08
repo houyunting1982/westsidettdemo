@@ -101,7 +101,6 @@ const Displayer = ({ totalCamera }) => {
     }
 
     const getImgSrc = () => {
-        console.log(currentClip.currentCamera, currentClip.currentFrame)
         const src = DemoImages["camera" + currentClip.currentCamera][currentClip.currentFrame]
         return src;
     }
@@ -153,7 +152,7 @@ const Displayer = ({ totalCamera }) => {
             ...prev,
             currentFrame: 0
         }))
-        const newIntervalId = setInterval(() => nextView(currentClip.currentCamera), 100);
+        const newIntervalId = setInterval(() => nextView(currentClip.currentCamera), 60);
         setIntervalId(newIntervalId);
     }
 
