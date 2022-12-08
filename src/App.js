@@ -1,25 +1,21 @@
-import logo from './logo.svg';
 import './App.css';
+import Displayer from './components/Displayer';
+import { useLocation } from 'react-router-dom';
+import { useMemo } from 'react';
+
+function useQuery() {
+    const { search } = useLocation();
+    return useMemo(() => new URLSearchParams(search), [search]);
+}
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const query = useQuery();
+    const totalCamera = query.get("totalCamera") || 2
+    return (
+        <div className="App">
+            <Displayer totalCamera={totalCamera} />
+        </div>
+    );
 }
 
 export default App;
