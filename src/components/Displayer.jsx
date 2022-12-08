@@ -29,7 +29,8 @@ const Displayer = ({ totalCamera }) => {
         currentFrame: 0,
         currentCamera: 1
     });
-    const cameraMax = parseInt(totalCamera);
+    const parsedTotalCamera = parseInt(totalCamera)
+    const cameraMax = parsedTotalCamera > 24 ? 24 : parsedTotalCamera;
     const frameMax = 80;
 
     useEffect(() => {
