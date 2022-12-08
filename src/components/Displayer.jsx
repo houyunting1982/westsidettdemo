@@ -32,7 +32,7 @@ const Displayer = ({ totalCamera }) => {
     });
     const parsedTotalCamera = parseInt(totalCamera)
     const cameraMax = parsedTotalCamera > 24 ? 24 : parsedTotalCamera;
-    const frameMax = 80;
+    const frameMax = 81;
 
     useEffect(() => {
         let isCancelled = false;
@@ -43,7 +43,7 @@ const Displayer = ({ totalCamera }) => {
             }
 
             const imagesPromiseList = [];
-            for (let index = 1; index < cameraMax; index++) {
+            for (let index = 0; index < cameraMax; index++) {
                 for (const i of DemoImages["camera" + index]) {
                     imagesPromiseList.push(preloadImage(i));
                 }
@@ -72,7 +72,7 @@ const Displayer = ({ totalCamera }) => {
     const nextFrame = (step = 1) => {
         setCurrentClip(prev => ({
             ...prev,
-            currentFrame: prev.currentFrame + step >= frameMax ? frameMax : prev.currentFrame + step,
+            currentFrame: prev.currentFrame + step >= frameMax - 1 ? frameMax - 1 : prev.currentFrame + step,
         }));
     }
 
@@ -85,14 +85,14 @@ const Displayer = ({ totalCamera }) => {
     const nextCamera = () => {
         setCurrentClip(prev => ({
             ...prev,
-            currentCamera: prev.currentCamera === cameraMax ? 0 : prev.currentCamera + 1,
+            currentCamera: prev.currentCamera === cameraMax - 1 ? 0 : prev.currentCamera + 1,
         }));
     }
 
     const nextView = (base = 1) => {
         setCurrentClip(prev => ({
             currentCamera: (Math.floor(prev.currentFrame / 8) + base) % (cameraMax),
-            currentFrame: prev.currentFrame === frameMax ? 0 : prev.currentFrame + 1,
+            currentFrame: prev.currentFrame === frameMax - 1 ? 0 : prev.currentFrame + 1,
         }));
     }
     const handleOnWheel = (e) => {
@@ -101,6 +101,7 @@ const Displayer = ({ totalCamera }) => {
     }
 
     const getImgSrc = () => {
+        console.log(currentClip.currentCamera, currentClip.currentFrame)
         const src = DemoImages["camera" + currentClip.currentCamera][currentClip.currentFrame]
         return src;
     }
@@ -120,6 +121,7 @@ const Displayer = ({ totalCamera }) => {
                 break;
             case 'ArrowDown':
                 preFrame(3);
+                break;
             default:
                 break;
         }
