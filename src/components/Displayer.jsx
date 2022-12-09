@@ -128,10 +128,14 @@ const Displayer = ({ totalCamera }) => {
                 preCamera();
                 break;
             case 'ArrowUp':
-                nextFrame(3);
+                if (!intervalId) {
+                    nextFrame(3);
+                }
                 break;
             case 'ArrowDown':
-                preFrame(3);
+                if (!intervalId) {
+                    preFrame(3);
+                }
                 break;
             default:
                 break;
