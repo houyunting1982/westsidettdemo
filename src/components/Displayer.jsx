@@ -98,6 +98,9 @@ const Displayer = ({ totalCamera }) => {
         }));
     }
     const handleOnWheel = (e) => {
+        if (intervalId) {
+            return;
+        }
         const { wheelDelta } = e.nativeEvent;
         wheelDelta > 0 ? preFrame() : nextFrame();
     }
