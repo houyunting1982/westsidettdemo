@@ -184,12 +184,12 @@ const Displayer = ({ totalCamera }) => {
                     <ArrowBackIosNewIcon />
                     <CameraAltIcon />
                 </Button>
-                <Button variant="contained" onClick={() => preFrame()} disabled={currentClip.currentFrame === 0}>
+                <Button variant="contained" onClick={() => preFrame()} disabled={intervalId || currentClip.currentFrame === 0}>
                     <FirstPageIcon />
                     <CropOriginalIcon />
                 </Button>
 
-                <Button variant="contained" onClick={() => nextFrame()} disabled={currentClip.currentFrame === frameMax}>
+                <Button variant="contained" onClick={() => nextFrame()} disabled={intervalId || currentClip.currentFrame === frameMax}>
                     <CropOriginalIcon />
                     <LastPageIcon />
                 </Button>
