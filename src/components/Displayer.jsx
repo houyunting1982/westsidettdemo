@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Box, Button, CircularProgress, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { Container, Stack } from "@mui/system";
 import React, { useEffect, useState, useCallback } from "react";
 import DemoImages from "../resource/images";
@@ -9,6 +9,7 @@ import CropOriginalIcon from '@mui/icons-material/CropOriginal';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
+import StopIcon from '@mui/icons-material/Stop';
 
 function preloadImage(src) {
     return new Promise((resolve, reject) => {
@@ -30,7 +31,8 @@ const Displayer = ({ totalCamera }) => {
         currentFrame: 0,
         currentCamera: 0
     });
-    const parsedTotalCamera = parseInt(totalCamera)
+    const [playSpeed, setplaySpeed] = useState(20)
+    const parsedTotalCamera = parseInt(totalCamera);
     const cameraMax = parsedTotalCamera > 24 ? 24 : parsedTotalCamera;
     const frameMax = 81;
 
@@ -91,7 +93,7 @@ const Displayer = ({ totalCamera }) => {
 
     const nextView = (base = 1) => {
         setCurrentClip(prev => ({
-            currentCamera: (Math.floor(prev.currentFrame / 8) + base) % (cameraMax),
+            ...prev,
             currentFrame: prev.currentFrame === frameMax - 1 ? 0 : prev.currentFrame + 1,
         }));
     }
@@ -104,6 +106,16 @@ const Displayer = ({ totalCamera }) => {
         const src = DemoImages["camera" + currentClip.currentCamera][currentClip.currentFrame]
         return src;
     }
+
+    const handleSpeedChange = (event) => {
+        if (intervalId) {
+            clearInterval(intervalId);
+            setIntervalId(0);
+            const newIntervalId = setInterval(() => nextView(currentClip.currentCamera), event.target.value);
+            setIntervalId(newIntervalId);
+        }
+        setplaySpeed(event.target.value);
+    };
 
     const handleKeyPress = useCallback((e) => {
         switch (e.key) {
@@ -152,19 +164,20 @@ const Displayer = ({ totalCamera }) => {
             ...prev,
             currentFrame: 0
         }))
-        const newIntervalId = setInterval(() => nextView(currentClip.currentCamera), 60);
+        const newIntervalId = setInterval(() => nextView(currentClip.currentCamera), playSpeed);
         setIntervalId(newIntervalId);
     }
-
 
     return (
         <>
             <Container sx={{ p: 3, my: 3 }}
                 onWheel={handleOnWheel}
             >
-                {imagesPreloaded && (
-                    <img id='img' src={getImgSrc()} alt="tabletennis" width="90%" />
-                )}
+                {
+                    imagesPreloaded ?
+                        <img id='img' src={getImgSrc()} alt="tabletennis" width="90%" />
+                        : <CircularProgress color="success" />
+                }
             </Container>
             <Stack direction="row" spacing={2} justifyContent="center">
                 <Button variant="outlined" color="success" onClick={preCamera} >
@@ -185,8 +198,28 @@ const Displayer = ({ totalCamera }) => {
                     <ArrowForwardIosIcon />
                 </Button>
                 <Button variant={intervalId ? "contained" : "outlined"} color="success" onClick={handleView}>
-                    <PlayCircleOutlineIcon />
+                    {
+                        intervalId ? <StopIcon /> : <PlayCircleOutlineIcon />
+                    }
                 </Button>
+                <Box sx={{ minWidth: 120 }}>
+                    <FormControl fullWidth size="small">
+                        <InputLabel id="play-speed-select-label">Speed</InputLabel>
+                        <Select
+                            labelId="play-speed-select-label"
+                            id="play-speed-select"
+                            value={playSpeed}
+                            label="Speed"
+                            onChange={handleSpeedChange}
+                        >
+                            <MenuItem value={10}>2x faster</MenuItem>
+                            <MenuItem value={20}>normal</MenuItem>
+                            <MenuItem value={40}>2x slower</MenuItem>
+                            <MenuItem value={100}>5x slower</MenuItem>
+                            <MenuItem value={1000}>Freezing...</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Box>
             </Stack>
         </>
 
