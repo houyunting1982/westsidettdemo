@@ -140,7 +140,7 @@ const Displayer = ({ totalCamera }) => {
             default:
                 break;
         }
-    }, [])
+    }, [intervalId])
 
     useEffect(() => {
         // attach the event listener
