@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
 import {
     BrowserRouter as Router,
     Switch,
     Route
 } from "react-router-dom";
+import PlayPage from './pages/PlayPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -14,7 +14,7 @@ root.render(
         <Router basename={`/${process.env.PUBLIC_URL}`}>
             <Switch>
                 <Route exact path="/">
-                    <App />
+                    <PlayPage />
                 </Route>
             </Switch>
         </Router>

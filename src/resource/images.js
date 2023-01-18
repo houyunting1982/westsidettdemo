@@ -1,5 +1,5 @@
-const DemoImages = {
-    camera0: [
+const DemoImages = [
+    [
         "https://i.ibb.co/sj26JWr/29-Felipe-BHLoop-Off-Push-C01-00216000.jpg",
         "https://i.ibb.co/smz8JSq/29-Felipe-BHLoop-Off-Push-C01-00216001.jpg",
         "https://i.ibb.co/N2z50DP/29-Felipe-BHLoop-Off-Push-C01-00216002.jpg",
@@ -82,7 +82,7 @@ const DemoImages = {
         "https://i.ibb.co/vqmYKGv/29-Felipe-BHLoop-Off-Push-C01-00216079.jpg",
         "https://i.ibb.co/ynzgvpx/29-Felipe-BHLoop-Off-Push-C01-00216080.jpg",
     ],
-    camera1: [
+    [
         "https://i.ibb.co/KsMWwS8/29-Felipe-BHLoop-Off-Push-C02-00216000.jpg",
         "https://i.ibb.co/TrGvp68/29-Felipe-BHLoop-Off-Push-C02-00216001.jpg",
         "https://i.ibb.co/HBv1RGv/29-Felipe-BHLoop-Off-Push-C02-00216002.jpg",
@@ -165,7 +165,7 @@ const DemoImages = {
         "https://i.ibb.co/TMbbQ74/29-Felipe-BHLoop-Off-Push-C02-00216079.jpg",
         "https://i.ibb.co/tL4V0Sd/29-Felipe-BHLoop-Off-Push-C02-00216080.jpg",
     ],
-    camera2: [
+    [
         "https://i.ibb.co/56yknfF/29-Felipe-BHLoop-Off-Push-C03-00216000.jpg",
         "https://i.ibb.co/wSGsTKR/29-Felipe-BHLoop-Off-Push-C03-00216001.jpg",
         "https://i.ibb.co/Dwx6bY6/29-Felipe-BHLoop-Off-Push-C03-00216003.jpg",
@@ -248,7 +248,7 @@ const DemoImages = {
         "https://i.ibb.co/gmk79rG/29-Felipe-BHLoop-Off-Push-C03-00216079.jpg",
         "https://i.ibb.co/Tbk0vdX/29-Felipe-BHLoop-Off-Push-C03-00216080.jpg",
     ],
-    camera3: [
+    [
         "https://i.ibb.co/x2t8r8k/29-Felipe-BHLoop-Off-Push-C04-00216001.jpg",
         "https://i.ibb.co/3FR2yss/29-Felipe-BHLoop-Off-Push-C04-00216000.jpg",
         "https://i.ibb.co/6Bb1MV0/29-Felipe-BHLoop-Off-Push-C04-00216002.jpg",
@@ -331,7 +331,7 @@ const DemoImages = {
         "https://i.ibb.co/hgGptsc/29-Felipe-BHLoop-Off-Push-C04-00216079.jpg",
         "https://i.ibb.co/QPxqjQB/29-Felipe-BHLoop-Off-Push-C04-00216080.jpg",
     ],
-    camera4: [
+    [
         "https://i.ibb.co/zZyTsmD/29-Felipe-BHLoop-Off-Push-C05-00216000.jpg",
         "https://i.ibb.co/hDwr14t/29-Felipe-BHLoop-Off-Push-C05-00216002.jpg",
         "https://i.ibb.co/2ZwSKW0/29-Felipe-BHLoop-Off-Push-C05-00216001.jpg",
@@ -414,7 +414,7 @@ const DemoImages = {
         "https://i.ibb.co/my987kM/29-Felipe-BHLoop-Off-Push-C05-00216079.jpg",
         "https://i.ibb.co/4N1CSXV/29-Felipe-BHLoop-Off-Push-C05-00216080.jpg",
     ],
-    camera5: [
+    [
         "https://i.ibb.co/HdmcGWM/29-Felipe-BHLoop-Off-Push-C06-00216000.jpg",
         "https://i.ibb.co/84V1pd4/29-Felipe-BHLoop-Off-Push-C06-00216001.jpg",
         "https://i.ibb.co/8gwkG1S/29-Felipe-BHLoop-Off-Push-C06-00216002.jpg",
@@ -497,7 +497,7 @@ const DemoImages = {
         "https://i.ibb.co/d0zgfH0/29-Felipe-BHLoop-Off-Push-C06-00216079.jpg",
         "https://i.ibb.co/94vpmx9/29-Felipe-BHLoop-Off-Push-C06-00216080.jpg",
     ],
-    camera6: [
+    [
         "https://i.ibb.co/HHq5LRs/29-Felipe-BHLoop-Off-Push-C07-00216000.jpg",
         "https://i.ibb.co/fQjRMj4/29-Felipe-BHLoop-Off-Push-C07-00216001.jpg",
         "https://i.ibb.co/nQPc5KT/29-Felipe-BHLoop-Off-Push-C07-00216002.jpg",
@@ -580,7 +580,7 @@ const DemoImages = {
         "https://i.ibb.co/bsRTc9K/29-Felipe-BHLoop-Off-Push-C07-00216079.jpg",
         "https://i.ibb.co/y0XvXsw/29-Felipe-BHLoop-Off-Push-C07-00216080.jpg",
     ],
-    camera7: [
+    [
         'https://i.ibb.co/qB2c9ns/29-Felipe-BHLoop-Off-Push-C08-00216000.jpg',
         'https://i.ibb.co/X213MSB/29-Felipe-BHLoop-Off-Push-C08-00216001.jpg',
         'https://i.ibb.co/frw1PfQ/29-Felipe-BHLoop-Off-Push-C08-00216002.jpg',
@@ -663,7 +663,7 @@ const DemoImages = {
         'https://i.ibb.co/qkNcQ79/29-Felipe-BHLoop-Off-Push-C08-00216079.jpg',
         'https://i.ibb.co/phVzW1L/29-Felipe-BHLoop-Off-Push-C08-00216080.jpg'
     ],
-    camera8: [
+    [
         'https://i.ibb.co/KDkZQ7Y/29-Felipe-BHLoop-Off-Push-C09-00216000.jpg',
         'https://i.ibb.co/tD226FC/29-Felipe-BHLoop-Off-Push-C09-00216001.jpg',
         'https://i.ibb.co/cx5bCNH/29-Felipe-BHLoop-Off-Push-C09-00216002.jpg',
@@ -747,7 +747,7 @@ const DemoImages = {
         'https://i.ibb.co/zmGBDJt/29-Felipe-BHLoop-Off-Push-C09-00216080.jpg'
     ]
     ,
-    camera9: [
+    [
         'https://i.ibb.co/3hZNC7z/29-Felipe-BHLoop-Off-Push-C10-00216000.jpg',
         'https://i.ibb.co/Z20G5Nj/29-Felipe-BHLoop-Off-Push-C10-00216001.jpg',
         'https://i.ibb.co/N6PJs4c/29-Felipe-BHLoop-Off-Push-C10-00216002.jpg',
@@ -830,7 +830,7 @@ const DemoImages = {
         'https://i.ibb.co/MkGhHQr/29-Felipe-BHLoop-Off-Push-C10-00216079.jpg',
         'https://i.ibb.co/Kyv4qw6/29-Felipe-BHLoop-Off-Push-C10-00216080.jpg'
     ],
-    camera10: [
+    [
         'https://i.ibb.co/QXMjpxt/29-Felipe-BHLoop-Off-Push-C11-00216001.jpg',
         'https://i.ibb.co/dQJZwNx/29-Felipe-BHLoop-Off-Push-C11-00216000.jpg',
         'https://i.ibb.co/NYs7tB5/29-Felipe-BHLoop-Off-Push-C11-00216002.jpg',
@@ -913,7 +913,7 @@ const DemoImages = {
         'https://i.ibb.co/wynsDYC/29-Felipe-BHLoop-Off-Push-C11-00216079.jpg',
         'https://i.ibb.co/7nL3LgL/29-Felipe-BHLoop-Off-Push-C11-00216080.jpg'
     ],
-    camera11: [
+    [
         'https://i.ibb.co/tZWP4Mk/29-Felipe-BHLoop-Off-Push-C12-00216000.jpg',
         'https://i.ibb.co/72V0r9G/29-Felipe-BHLoop-Off-Push-C12-00216001.jpg',
         'https://i.ibb.co/drWfhHz/29-Felipe-BHLoop-Off-Push-C12-00216002.jpg',
@@ -996,7 +996,7 @@ const DemoImages = {
         'https://i.ibb.co/Jzkqy2X/29-Felipe-BHLoop-Off-Push-C12-00216079.jpg',
         'https://i.ibb.co/Wz4PnGJ/29-Felipe-BHLoop-Off-Push-C12-00216080.jpg'
     ],
-    camera12: [
+    [
         'https://i.ibb.co/yf3qKDf/29-Felipe-BHLoop-Off-Push-C13-00216000.jpg',
         'https://i.ibb.co/qrf7q72/29-Felipe-BHLoop-Off-Push-C13-00216001.jpg',
         'https://i.ibb.co/X2DDtnf/29-Felipe-BHLoop-Off-Push-C13-00216002.jpg',
@@ -1079,7 +1079,7 @@ const DemoImages = {
         'https://i.ibb.co/svqbMfG/29-Felipe-BHLoop-Off-Push-C13-00216079.jpg',
         'https://i.ibb.co/F3Pj4Fm/29-Felipe-BHLoop-Off-Push-C13-00216080.jpg'
     ],
-    camera13: [
+    [
         'https://i.ibb.co/WHLJ6xz/29-Felipe-BHLoop-Off-Push-C14-00216000.jpg',
         'https://i.ibb.co/82FD4nP/29-Felipe-BHLoop-Off-Push-C14-00216001.jpg',
         'https://i.ibb.co/svk3L1D/29-Felipe-BHLoop-Off-Push-C14-00216002.jpg',
@@ -1162,7 +1162,7 @@ const DemoImages = {
         'https://i.ibb.co/RTVzNK4/29-Felipe-BHLoop-Off-Push-C14-00216079.jpg',
         'https://i.ibb.co/cLt7N2t/29-Felipe-BHLoop-Off-Push-C14-00216080.jpg'
     ],
-    camera14: [
+    [
         'https://i.ibb.co/x265jsJ/29-Felipe-BHLoop-Off-Push-C15-00216000.jpg',
         'https://i.ibb.co/Wnhw5YN/29-Felipe-BHLoop-Off-Push-C15-00216001.jpg',
         'https://i.ibb.co/jD5QMjD/29-Felipe-BHLoop-Off-Push-C15-00216002.jpg',
@@ -1245,7 +1245,7 @@ const DemoImages = {
         'https://i.ibb.co/y62c1r4/29-Felipe-BHLoop-Off-Push-C15-00216079.jpg',
         'https://i.ibb.co/QkBfw7N/29-Felipe-BHLoop-Off-Push-C15-00216080.jpg'
     ],
-    camera15: [
+    [
         'https://i.ibb.co/bPZLjpF/29-Felipe-BHLoop-Off-Push-C16-00216000.jpg',
         'https://i.ibb.co/t819sZG/29-Felipe-BHLoop-Off-Push-C16-00216001.jpg',
         'https://i.ibb.co/SchfnSy/29-Felipe-BHLoop-Off-Push-C16-00216002.jpg',
@@ -1328,7 +1328,7 @@ const DemoImages = {
         'https://i.ibb.co/f06JvxM/29-Felipe-BHLoop-Off-Push-C16-00216079.jpg',
         'https://i.ibb.co/QKNYBTw/29-Felipe-BHLoop-Off-Push-C16-00216080.jpg']
     ,
-    camera16: [
+    [
         'https://i.ibb.co/KzBS02b/29-Felipe-BHLoop-Off-Push-C17-00216000.jpg',
         'https://i.ibb.co/xfSzqW6/29-Felipe-BHLoop-Off-Push-C17-00216001.jpg',
         'https://i.ibb.co/GTpJJVD/29-Felipe-BHLoop-Off-Push-C17-00216002.jpg',
@@ -1411,7 +1411,7 @@ const DemoImages = {
         'https://i.ibb.co/W0DZ9cB/29-Felipe-BHLoop-Off-Push-C17-00216079.jpg',
         'https://i.ibb.co/P4qL6v9/29-Felipe-BHLoop-Off-Push-C17-00216080.jpg'
     ],
-    camera17: [
+    [
         'https://i.ibb.co/nmB1pXN/29-Felipe-BHLoop-Off-Push-C18-00216000.jpg',
         'https://i.ibb.co/f0fq96P/29-Felipe-BHLoop-Off-Push-C18-00216002.jpg',
         'https://i.ibb.co/jTZ64Nd/29-Felipe-BHLoop-Off-Push-C18-00216001.jpg',
@@ -1494,7 +1494,7 @@ const DemoImages = {
         'https://i.ibb.co/cJS9Psp/29-Felipe-BHLoop-Off-Push-C18-00216079.jpg',
         'https://i.ibb.co/Cw3h9cQ/29-Felipe-BHLoop-Off-Push-C18-00216080.jpg'
     ],
-    camera18: [
+    [
         'https://i.ibb.co/FWYMxHk/29-Felipe-BHLoop-Off-Push-C19-00216000.jpg',
         'https://i.ibb.co/Kw79B9X/29-Felipe-BHLoop-Off-Push-C19-00216001.jpg',
         'https://i.ibb.co/cD637ry/29-Felipe-BHLoop-Off-Push-C19-00216002.jpg',
@@ -1577,7 +1577,7 @@ const DemoImages = {
         'https://i.ibb.co/M7MsMj1/29-Felipe-BHLoop-Off-Push-C19-00216079.jpg',
         'https://i.ibb.co/yPS2TQH/29-Felipe-BHLoop-Off-Push-C19-00216080.jpg'
     ],
-    camera19: [
+    [
         'https://i.ibb.co/VQgGBKH/29-Felipe-BHLoop-Off-Push-C20-00216000.jpg',
         'https://i.ibb.co/W2HdC4S/29-Felipe-BHLoop-Off-Push-C20-00216001.jpg',
         'https://i.ibb.co/9tTkPMt/29-Felipe-BHLoop-Off-Push-C20-00216002.jpg',
@@ -1660,7 +1660,7 @@ const DemoImages = {
         'https://i.ibb.co/584MZyh/29-Felipe-BHLoop-Off-Push-C20-00216079.jpg',
         'https://i.ibb.co/2FCtRfq/29-Felipe-BHLoop-Off-Push-C20-00216080.jpg'
     ],
-    camera20: [
+    [
         'https://i.ibb.co/0GQJVdX/29-Felipe-BHLoop-Off-Push-C21-00216000.jpg',
         'https://i.ibb.co/yF1mGNW/29-Felipe-BHLoop-Off-Push-C21-00216001.jpg',
         'https://i.ibb.co/xfh2qKJ/29-Felipe-BHLoop-Off-Push-C21-00216002.jpg',
@@ -1743,7 +1743,7 @@ const DemoImages = {
         'https://i.ibb.co/1qqkSPB/29-Felipe-BHLoop-Off-Push-C21-00216079.jpg',
         'https://i.ibb.co/qCxCgNT/29-Felipe-BHLoop-Off-Push-C21-00216080.jpg'
     ],
-    camera21: [
+    [
         'https://i.ibb.co/hfPxrJX/29-Felipe-BHLoop-Off-Push-C22-00216000.jpg',
         'https://i.ibb.co/C88CPnC/29-Felipe-BHLoop-Off-Push-C22-00216001.jpg',
         'https://i.ibb.co/RQjycCh/29-Felipe-BHLoop-Off-Push-C22-00216002.jpg',
@@ -1826,7 +1826,7 @@ const DemoImages = {
         'https://i.ibb.co/fvsXFXh/29-Felipe-BHLoop-Off-Push-C22-00216080.jpg',
         'https://i.ibb.co/Y8MmjBL/29-Felipe-BHLoop-Off-Push-C22-00216079.jpg'
     ],
-    camera22: [
+    [
         'https://i.ibb.co/ZfPpfQb/29-Felipe-BHLoop-Off-Push-C23-00216000.jpg',
         'https://i.ibb.co/cwg57bm/29-Felipe-BHLoop-Off-Push-C23-00216001.jpg',
         'https://i.ibb.co/cgJQTz5/29-Felipe-BHLoop-Off-Push-C23-00216002.jpg',
@@ -1909,7 +1909,7 @@ const DemoImages = {
         'https://i.ibb.co/6NbjN5p/29-Felipe-BHLoop-Off-Push-C23-00216079.jpg',
         'https://i.ibb.co/3RCX633/29-Felipe-BHLoop-Off-Push-C23-00216080.jpg'
     ],
-    camera23: [
+    [
         'https://i.ibb.co/gzN01vF/29-Felipe-BHLoop-Off-Push-C24-00216000.jpg',
         'https://i.ibb.co/yqMZsy4/29-Felipe-BHLoop-Off-Push-C24-00216001.jpg',
         'https://i.ibb.co/JnckjjZ/29-Felipe-BHLoop-Off-Push-C24-00216002.jpg',
@@ -1965,12 +1965,12 @@ const DemoImages = {
         'https://i.ibb.co/9n9RYG4/29-Felipe-BHLoop-Off-Push-C24-00216052.jpg',
         'https://i.ibb.co/B60zcyw/29-Felipe-BHLoop-Off-Push-C24-00216053.jpg',
         'https://i.ibb.co/pyMYc4s/29-Felipe-BHLoop-Off-Push-C24-00216054.jpg',
-        'https://i.ibb.co/Q6X0rYR/29-Felipe-BHLoop-Off-Push-C24-00216056.jpg',
         'https://i.ibb.co/r6Qgmkz/29-Felipe-BHLoop-Off-Push-C24-00216055.jpg',
+        'https://i.ibb.co/Q6X0rYR/29-Felipe-BHLoop-Off-Push-C24-00216056.jpg',
         'https://i.ibb.co/7ttZGx4/29-Felipe-BHLoop-Off-Push-C24-00216057.jpg',
         'https://i.ibb.co/GtjGXLN/29-Felipe-BHLoop-Off-Push-C24-00216058.jpg',
-        'https://i.ibb.co/LvJLZZn/29-Felipe-BHLoop-Off-Push-C24-00216060.jpg',
         'https://i.ibb.co/5Gczmd2/29-Felipe-BHLoop-Off-Push-C24-00216059.jpg',
+        'https://i.ibb.co/LvJLZZn/29-Felipe-BHLoop-Off-Push-C24-00216060.jpg',
         'https://i.ibb.co/Q8VjBGr/29-Felipe-BHLoop-Off-Push-C24-00216061.jpg',
         'https://i.ibb.co/gr1gf95/29-Felipe-BHLoop-Off-Push-C24-00216062.jpg',
         'https://i.ibb.co/1LHJsfq/29-Felipe-BHLoop-Off-Push-C24-00216063.jpg',
@@ -1992,6 +1992,6 @@ const DemoImages = {
         'https://i.ibb.co/vv94qFL/29-Felipe-BHLoop-Off-Push-C24-00216079.jpg',
         'https://i.ibb.co/vJM828r/29-Felipe-BHLoop-Off-Push-C24-00216080.jpg'
     ]
-};
+]
 
 export default DemoImages;
