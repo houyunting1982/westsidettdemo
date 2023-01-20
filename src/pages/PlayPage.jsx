@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import Displayer from '../components/Displayer';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
-import { Stack } from '@mui/material';
+import { Stack, Switch, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Unstable_Grid2';
 import ControlPanel from '../components/ControlPanel';
@@ -24,17 +24,34 @@ const initStatus = {
     playSpeed: 30,
 }
 
+const initBoundary = {
+    maxCamera: 0,
+    maxIndex: 0
+}
+
+const initPlayParams = {
+    indexSpeedMultiplier: 0,
+    playDirection: 0, // -1 : prev, 0 : Current, 1 : next
+    cameraMovingDirection: 0 // -1 : prev, 0 : Current, 1 : next
+}
+
+const initAnchorPoint = {
+    px: -1,
+    py: -1
+}
+
 const PlayPage = () => {
     const [playStatus, setPlayStatus] = useState(initStatus);
     const [loadedImages, setLoadedImages] = useState(null);
-    const [boundary, setBoundary] = useState({
-        maxCamera: 0,
-        maxIndex: 0
-    });
+    const [boundary, setBoundary] = useState(initBoundary);
     const [loaded, setLoaded] = useState(false);
-    const [intervalId, setIntervalId] = useState(0);
+    const [indexIntervalId, setindexIntervalId] = useState(0);
+    const [cameraIntervalId, setcameraIntervalId] = useState(0);
     const [title, setTitle] = useState(null);
     const [playerName, setPlayerName] = useState('FELIPE MORITA')
+    const [joyStickParams, setjoyStickParams] = useState(initPlayParams)
+    const [enableJoyStickMode, setenableJoyStickMode] = useState(false)
+    const [anchorPoint, setAnchorPoint] = useState(initAnchorPoint)
 
     const preLoadImages = async (images) => {
         const imagesPromiseList = [];
@@ -67,23 +84,24 @@ const PlayPage = () => {
     }, [loadImages])
 
     useEffect(() => {
-        if (playStatus.currentIndex === boundary.maxIndex - 1 && intervalId) {
-            clearInterval(intervalId);
-            setIntervalId(0);
+        if (playStatus.currentIndex === boundary.maxIndex - 1 && indexIntervalId) {
+            clearInterval(indexIntervalId);
+            setindexIntervalId(0);
+            setPlayStatus(initStatus)
         }
-    }, [playStatus.currentIndex, boundary.maxIndex, intervalId])
+    }, [playStatus.currentIndex, boundary.maxIndex, indexIntervalId])
 
-    const goToPrevIndex = () => {
+    const goToPrevIndex = (step = 1) => {
         setPlayStatus(prev => ({
             ...prev,
-            currentIndex: prev.currentIndex - 1 < 0 ? 0 : prev.currentIndex - 1,
+            currentIndex: prev.currentIndex - step < 0 ? 0 : prev.currentIndex - step,
         }));
     }
 
-    const goToNextIndex = () => {
+    const goToNextIndex = (step = 1) => {
         setPlayStatus(prev => ({
             ...prev,
-            currentIndex: prev.currentIndex + 1 >= boundary.maxIndex ? boundary.maxIndex - 1 : prev.currentIndex + 1,
+            currentIndex: prev.currentIndex + step >= boundary.maxIndex ? boundary.maxIndex - 1 : prev.currentIndex + step,
         }));
     }
 
@@ -102,9 +120,9 @@ const PlayPage = () => {
     }
 
     const goPlay = () => {
-        if (intervalId) {
-            clearInterval(intervalId);
-            setIntervalId(0);
+        if (indexIntervalId) {
+            clearInterval(indexIntervalId);
+            setindexIntervalId(0);
             return;
         }
         setPlayStatus(prev => ({
@@ -112,7 +130,7 @@ const PlayPage = () => {
             currentIndex: 0
         }))
         const newIntervalId = setInterval(() => goToNextIndex(), playStatus.playSpeed);
-        setIntervalId(newIntervalId);
+        setindexIntervalId(newIntervalId);
     }
 
     const getCurrentImageUrl = () => {
@@ -142,44 +160,203 @@ const PlayPage = () => {
         console.log(e.code)
         switch (e.code) {
             case 'ArrowRight':
-                goToNextCamera();
+                if (!enableJoyStickMode) {
+                    goToNextCamera();
+                }
                 break;
             case 'ArrowLeft':
-                goToPrevCamera();
+                if (!enableJoyStickMode) {
+                    goToPrevCamera();
+                }
                 break;
             case 'ArrowUp':
-                goToPrevIndex();
+                if (!enableJoyStickMode) {
+                    goToPrevIndex();
+                }
                 break;
             case 'ArrowDown':
-                goToNextIndex();
+                if (!enableJoyStickMode) {
+                    goToNextIndex();
+                }
                 break;
             case 'Space':
-                goPlay();
+                if (!enableJoyStickMode) {
+                    e.preventDefault();
+                    goPlay();
+                }
+                break;
+            case 'ShiftLeft':
+            case 'ShiftRight':
+                setenableJoyStickMode(prev => !prev);
+                if (indexIntervalId) {
+                    clearInterval(indexIntervalId);
+                    setindexIntervalId(0);
+                    setPlayStatus(initStatus);
+                    return;
+                }
                 break;
             default:
                 break;
         }
     }, [goToNextCamera, goToPrevCamera, goToPrevIndex, goToNextIndex, goPlay])
 
+    const handleMouseDown = (e) => {
+        console.log(e.type, e.button, e.clientX, e.clientY);
+        setAnchorPoint({
+            px: e.clientX,
+            py: e.clientY
+        })
+    };
+
+    const handleMouseUp = (e) => {
+        setAnchorPoint(initAnchorPoint)
+    };
+
+    const handleMouseMove = (e) => {
+        const nextMove = detectNextMove(e.clientX, e.clientY);
+        if (nextMove.cameraMovingDirection !== joyStickParams.cameraMovingDirection ||
+            nextMove.indexSpeedMultiplier !== joyStickParams.indexSpeedMultiplier ||
+            nextMove.playDirection !== joyStickParams.playDirection) {
+            setjoyStickParams(nextMove);
+        }
+    }
+
+    const handleMouseOut = (e) => {
+        setjoyStickParams(initPlayParams);
+    }
+
+    const calculateAngle = (cx, cy, ex, ey) => {
+        const dy = ey - cy;
+        const dx = ex - cx;
+        let theta = Math.atan2(dy, dx); // range (-PI, PI]
+        theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
+        //if (theta < 0) theta = 360 + theta; // range [0, 360)
+        return theta;
+    }
+
+    const calculateDistance = (cx, cy, ex, ey) => {
+        const dy = ey - cy;
+        const dx = ex - cx;
+        var dis = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+        return dis;
+    }
+
+    const detectNextMove = (x, y) => {
+        if (anchorPoint.px < 0 || anchorPoint.py < 0) {
+            return initPlayParams;
+        }
+        const dis = calculateDistance(anchorPoint.px, anchorPoint.py, x, y);
+        if (dis < 100) {
+            return initPlayParams;
+        }
+        let indexSpeedMultiplier = 0;
+        let cameraMovingDirection = 0;
+        let playDirection = 0;
+        const angle = calculateAngle(anchorPoint.px, anchorPoint.py, x, y)
+        if (angle >= -22.5 && angle < 22.5) {
+            cameraMovingDirection = 1;
+            playDirection = 0;
+            indexSpeedMultiplier = 0;
+        } else if (angle >= 22.5 && angle < 67.5) {
+            cameraMovingDirection = 1;
+            playDirection = -1;
+            indexSpeedMultiplier = calculateIndexSpeedMultiplierByDistance(dis);
+        } else if (angle >= 67.5 && angle < 112.5) {
+            cameraMovingDirection = 0;
+            playDirection = -1;
+            indexSpeedMultiplier = calculateIndexSpeedMultiplierByDistance(dis);
+        } else if (angle >= 112.5 && angle < 157.5) {
+            cameraMovingDirection = -1;
+            playDirection = -1;
+            indexSpeedMultiplier = calculateIndexSpeedMultiplierByDistance(dis);
+        } else if ((angle >= 157.5 && angle <= 180) || (angle >= -180 && angle < -157.5)) {
+            cameraMovingDirection = -1;
+            playDirection = 0;
+            indexSpeedMultiplier = 0;
+        } else if (angle >= -157.5 && angle < -112.5) {
+            cameraMovingDirection = -1;
+            playDirection = 1;
+            indexSpeedMultiplier = calculateIndexSpeedMultiplierByDistance(dis);
+        } else if (angle >= -112.5 && angle < -67.5) {
+            cameraMovingDirection = 0;
+            playDirection = 1;
+            indexSpeedMultiplier = calculateIndexSpeedMultiplierByDistance(dis);
+        } else {
+            cameraMovingDirection = 1;
+            playDirection = 1;
+            indexSpeedMultiplier = calculateIndexSpeedMultiplierByDistance(dis);
+        }
+        return {
+            indexSpeedMultiplier,
+            cameraMovingDirection,
+            playDirection
+        };
+    }
+
+    const calculateIndexSpeedMultiplierByDistance = (dis) => {
+        if (dis < 100) {
+            return 0;
+        }
+        if (dis >= 100 && dis < 200) {
+            return 1;
+        }
+        if (dis >= 200 && dis < 300) {
+            return 2;
+        }
+        if (dis >= 300 && dis < 400) {
+            return 4;
+        }
+        return 8;
+    }
+
+    useEffect(() => {
+        if (indexIntervalId) {
+            clearInterval(indexIntervalId);
+            setindexIntervalId(0);
+        }
+        if (cameraIntervalId) {
+            clearInterval(cameraIntervalId);
+            setcameraIntervalId(0);
+        }
+        if (joyStickParams.playDirection === 1) {
+            setindexIntervalId(setInterval(() => goToNextIndex(), Math.ceil(30 / joyStickParams.indexSpeedMultiplier)));
+        } else if (joyStickParams.playDirection === -1) {
+            setindexIntervalId(setInterval(() => goToPrevIndex(), Math.ceil(30 / joyStickParams.indexSpeedMultiplier)));
+        }
+        if (joyStickParams.cameraMovingDirection === 1) {
+            setcameraIntervalId(setInterval(() => goToNextCamera(), 500));
+        } else if (joyStickParams.cameraMovingDirection === -1) {
+            setcameraIntervalId(setInterval(() => goToPrevCamera(), 500));
+        }
+    }, [joyStickParams])
+
     useEffect(() => {
         // attach the event listener
         document.addEventListener('keydown', handleKeyPress);
         // remove the event listener
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mousedown', handleMouseDown);
+        document.addEventListener('mouseup', handleMouseUp);
+        //document.addEventListener('mouseout', handleMouseOut);
         return () => {
             document.removeEventListener('keydown', handleKeyPress);
+            document.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('mousedown', handleMouseDown);
+            document.removeEventListener('mouseup', handleMouseUp);
+            //document.removeEventListener('mouseout', handleMouseOut);
         };
     }, [handleKeyPress]);
 
     return (
         <>
-            <Container>
+            <Container onMouseOut={handleMouseOut}>
                 <Header title={title} playerName={playerName} />
                 <Grid container alignItems="center" spacing={2}>
                     <Grid item xs={3}>
                         <Sidebar setTitle={setTitle} />
                     </Grid>
                     <Grid item xs={9}>
-                        <Displayer imageSrc={getCurrentImageUrl()} />
+                        <Displayer imageSrc={getCurrentImageUrl()} disableAll={enableJoyStickMode} />
                     </Grid>
                     <Grid xsOffset={3} xs={9}>
                         <ControlPanel
@@ -188,14 +365,23 @@ const PlayPage = () => {
                             goToNextCamera={goToNextCamera}
                             goToPrevCamera={goToPrevCamera}
                             goPlay={goPlay}
-                            isPlaying={!!intervalId}
+                            isPlaying={!!indexIntervalId}
                             canGoNextCamera={canGoNextCamera}
                             canGoPrevCamera={canGoPrevCamera}
                             canGoNextIndex={canGoNextIndex}
                             canGoPrevIndex={canGoPrevIndex}
+                            disableAll={enableJoyStickMode}
                         />
                     </Grid>
                 </Grid>
+                <Switch checked={enableJoyStickMode} />
+                <Typography variant='h6' color='white'>
+                    Multiplier: {joyStickParams.indexSpeedMultiplier}
+                    <br />
+                    CameraDirection: {joyStickParams.cameraMovingDirection}
+                    <br />
+                    PlayDirection: {joyStickParams.playDirection}
+                </Typography>
             </Container>
         </>
     )

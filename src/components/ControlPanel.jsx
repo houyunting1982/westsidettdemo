@@ -40,28 +40,29 @@ const ControlPanel = ({
     canGoNextCamera,
     canGoPrevCamera,
     canGoNextIndex,
-    canGoPrevIndex
+    canGoPrevIndex,
+    disableAll
 }) => {
     return (
         <>
             <Stack direction="row" spacing={2} justifyContent="space-evenly">
-                <ControlButton color='inherit' onClick={goToPrevCamera} disabled={canGoPrevCamera()}>
+                <ControlButton color='inherit' onClick={() => goToPrevCamera()} disabled={canGoPrevCamera() || disableAll}>
                     <ArrowBackIosNewIcon />
                     <CameraAltIcon />
                 </ControlButton>
-                <ControlButton color='inherit' onClick={goToPrevIndex} disabled={canGoPrevIndex()}>
+                <ControlButton color='inherit' onClick={() => goToPrevIndex()} disabled={canGoPrevIndex() || disableAll}>
                     <ArrowLeftIcon />
                 </ControlButton>
-                <ControlButton variant={isPlaying ? "contained" : "outlined"} color='inherit' onClick={goPlay}>
+                <ControlButton variant={isPlaying ? "contained" : "outlined"} color='inherit' onClick={() => goPlay()} disabled={disableAll}>
                     {
                         isPlaying ? <ReplayIcon sx={{ color: '#363636' }} /> :
                             <PlayCircleOutlineIcon />
                     }
                 </ControlButton>
-                <ControlButton color='inherit' onClick={goToNextIndex} disabled={canGoNextIndex()}>
+                <ControlButton color='inherit' onClick={() => goToNextIndex()} disabled={canGoNextIndex() || disableAll}>
                     <ArrowRightIcon />
                 </ControlButton>
-                <ControlButton color='inherit' onClick={goToNextCamera} disabled={canGoNextCamera()}>
+                <ControlButton color='inherit' onClick={() => goToNextCamera()} disabled={canGoNextCamera() || disableAll}>
                     <CameraAltIcon />
                     <ArrowForwardIosIcon />
                 </ControlButton>

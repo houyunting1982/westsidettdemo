@@ -2,7 +2,7 @@ import { CircularProgress } from "@mui/material";
 import { Container, Stack } from "@mui/system";
 import React, { } from "react";
 
-const Displayer = ({ imageSrc }) => {
+const Displayer = ({ imageSrc, disableAll }) => {
 
     // const handleSpeedChange = (event) => {
     //     if (intervalId) {
@@ -60,7 +60,7 @@ const Displayer = ({ imageSrc }) => {
             <Container sx={{ p: 3 }}>
                 {
                     imageSrc ?
-                        <img id='img' src={imageSrc} alt="tabletennis" width="100%" />
+                        <input type='image' id='img' src={imageSrc} alt="tabletennis" width="100%" disabled />
                         : <CircularProgress color="success" />
                 }
             </Container>
