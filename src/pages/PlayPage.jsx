@@ -1,27 +1,28 @@
 import { useState, useEffect, useCallback } from 'react';
-import Displayer from '../components/Displayer';
-import Sidebar from '../components/Sidebar';
-import Header from '../components/Header';
-import { Stack, Switch, Typography } from '@mui/material';
+import Displayer from '../components/player/Displayer';
+import Sidebar from '../components/player/Sidebar';
+import Header from '../components/player/Header';
+import { Stack, Switch } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Unstable_Grid2';
-import ControlPanel from '../components/ControlPanel';
+import ControlPanel from '../components/player/ControlPanel';
 
-import images from "../resource/images"; // It should be loaded from api
+import imagesSet from "../resource/images"; // It should be loaded from api
 import { preloadImage } from '../services/utils';
+import { useParams } from 'react-router-dom';
 
 const Container = styled(Stack)({
     textAlign: 'center',
-    width: '80%',
-    maxWidth: '120vh',
-    minWidth: '1000px',
-    margin: 'auto'
+    maxWidth: '1600px',
+    minWidth: '1200px',
+    margin: '100px auto',
+    padding: '0 50px'
 });
 
 const initStatus = {
     currentCamera: 0,
     currentIndex: 0,
-    playSpeed: 30,
+    playSpeed: 20,
 }
 
 const initBoundary = {
@@ -35,23 +36,21 @@ const initPlayParams = {
     cameraMovingDirection: 0 // -1 : prev, 0 : Current, 1 : next
 }
 
-const initAnchorPoint = {
-    px: -1,
-    py: -1
-}
 
 const PlayPage = () => {
+    const { player } = useParams();
     const [playStatus, setPlayStatus] = useState(initStatus);
     const [loadedImages, setLoadedImages] = useState(null);
     const [boundary, setBoundary] = useState(initBoundary);
     const [loaded, setLoaded] = useState(false);
     const [indexIntervalId, setindexIntervalId] = useState(0);
     const [cameraIntervalId, setcameraIntervalId] = useState(0);
-    const [title, setTitle] = useState(null);
-    const [playerName, setPlayerName] = useState('FELIPE MORITA')
+    const [playerName, setPlayerName] = useState(imagesSet.name)
     const [joyStickParams, setjoyStickParams] = useState(initPlayParams)
     const [enableJoyStickMode, setenableJoyStickMode] = useState(false)
-    const [anchorPoint, setAnchorPoint] = useState(initAnchorPoint)
+
+    const [title, setTitle] = useState(imagesSet.fhLoopOffBlock.title);
+    const [currentImages, setCurrentImages] = useState(imagesSet.fhLoopOffBlock.data);
 
     const preLoadImages = async (images) => {
         const imagesPromiseList = [];
@@ -66,14 +65,22 @@ const PlayPage = () => {
     }
 
     const loadImages = useCallback(async () => {
-        const responseImages = await Promise.resolve(images);
+        if (!currentImages) {
+            return;
+        }
+        const responseImages = await Promise.resolve(currentImages);
         const maxCamera = responseImages.length;
         const maxIndex = responseImages[0].length;
         setBoundary({ maxCamera, maxIndex });
         setLoadedImages(responseImages);
         // For preload the pictures only. It should be replaced by another better way to cache the images.
         await preLoadImages(responseImages);
-    }, [])
+    }, [currentImages])
+
+    const setCurrentTechnique = (technique) => {
+        setTitle(imagesSet[technique].title);
+        setCurrentImages(imagesSet[technique].data);
+    }
 
     useEffect(() => {
         const init = async () => {
@@ -83,43 +90,40 @@ const PlayPage = () => {
         init();
     }, [loadImages])
 
-    useEffect(() => {
-        if (playStatus.currentIndex === boundary.maxIndex - 1 && indexIntervalId) {
-            clearInterval(indexIntervalId);
-            setindexIntervalId(0);
-            setPlayStatus(initStatus)
-        }
-    }, [playStatus.currentIndex, boundary.maxIndex, indexIntervalId])
+    const resetjoyStickParams = () => setjoyStickParams(initPlayParams);
 
-    const goToPrevIndex = (step = 1) => {
+    const goToPrevIndex = useCallback((step = 1) => {
         setPlayStatus(prev => ({
             ...prev,
             currentIndex: prev.currentIndex - step < 0 ? 0 : prev.currentIndex - step,
         }));
-    }
+    }, []);
 
-    const goToNextIndex = (step = 1) => {
+    const goToNextIndex = useCallback((step = 1, loopMode = false) => {
         setPlayStatus(prev => ({
             ...prev,
-            currentIndex: prev.currentIndex + step >= boundary.maxIndex ? boundary.maxIndex - 1 : prev.currentIndex + step,
+            currentIndex: prev.currentIndex + step >= boundary.maxIndex ?
+                loopMode ?
+                    0 : boundary.maxIndex - 1
+                : prev.currentIndex + step,
         }));
-    }
+    }, [boundary.maxIndex]);
 
-    const goToPrevCamera = () => {
+    const goToPrevCamera = useCallback(() => {
         setPlayStatus(prev => ({
             ...prev,
             currentCamera: prev.currentCamera - 1 < 0 ? 0 : prev.currentCamera - 1,
         }))
-    }
+    }, []);
 
-    const goToNextCamera = () => {
+    const goToNextCamera = useCallback(() => {
         setPlayStatus(prev => ({
             ...prev,
             currentCamera: prev.currentCamera + 1 >= boundary.maxCamera ? boundary.maxCamera - 1 : prev.currentCamera + 1,
         }))
-    }
+    }, [boundary.maxCamera])
 
-    const goPlay = () => {
+    const goPlay = useCallback(() => {
         if (indexIntervalId) {
             clearInterval(indexIntervalId);
             setindexIntervalId(0);
@@ -128,16 +132,16 @@ const PlayPage = () => {
         setPlayStatus(prev => ({
             ...prev,
             currentIndex: 0
-        }))
-        const newIntervalId = setInterval(() => goToNextIndex(), playStatus.playSpeed);
+        }));
+        const newIntervalId = setInterval(() => goToNextIndex(1, true), playStatus.playSpeed);
         setindexIntervalId(newIntervalId);
-    }
+    }, [goToNextIndex, indexIntervalId, playStatus.playSpeed]);
 
     const getCurrentImageUrl = () => {
         if (!loaded) {
             return null;
         }
-        return images[playStatus.currentCamera][playStatus.currentIndex];
+        return currentImages[playStatus.currentCamera][playStatus.currentIndex];
     }
 
     const canGoPrevIndex = () => {
@@ -180,10 +184,8 @@ const PlayPage = () => {
                 }
                 break;
             case 'Space':
-                if (!enableJoyStickMode) {
-                    e.preventDefault();
-                    goPlay();
-                }
+                e.preventDefault();
+                goPlay();
                 break;
             case 'ShiftLeft':
             case 'ShiftRight':
@@ -198,116 +200,7 @@ const PlayPage = () => {
             default:
                 break;
         }
-    }, [goToNextCamera, goToPrevCamera, goToPrevIndex, goToNextIndex, goPlay])
-
-    const handleMouseDown = (e) => {
-        console.log(e.type, e.button, e.clientX, e.clientY);
-        setAnchorPoint({
-            px: e.clientX,
-            py: e.clientY
-        })
-    };
-
-    const handleMouseUp = (e) => {
-        setAnchorPoint(initAnchorPoint)
-    };
-
-    const handleMouseMove = (e) => {
-        const nextMove = detectNextMove(e.clientX, e.clientY);
-        if (nextMove.cameraMovingDirection !== joyStickParams.cameraMovingDirection ||
-            nextMove.indexSpeedMultiplier !== joyStickParams.indexSpeedMultiplier ||
-            nextMove.playDirection !== joyStickParams.playDirection) {
-            setjoyStickParams(nextMove);
-        }
-    }
-
-    const handleMouseOut = (e) => {
-        setjoyStickParams(initPlayParams);
-    }
-
-    const calculateAngle = (cx, cy, ex, ey) => {
-        const dy = ey - cy;
-        const dx = ex - cx;
-        let theta = Math.atan2(dy, dx); // range (-PI, PI]
-        theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
-        //if (theta < 0) theta = 360 + theta; // range [0, 360)
-        return theta;
-    }
-
-    const calculateDistance = (cx, cy, ex, ey) => {
-        const dy = ey - cy;
-        const dx = ex - cx;
-        var dis = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-        return dis;
-    }
-
-    const detectNextMove = (x, y) => {
-        if (anchorPoint.px < 0 || anchorPoint.py < 0) {
-            return initPlayParams;
-        }
-        const dis = calculateDistance(anchorPoint.px, anchorPoint.py, x, y);
-        if (dis < 100) {
-            return initPlayParams;
-        }
-        let indexSpeedMultiplier = 0;
-        let cameraMovingDirection = 0;
-        let playDirection = 0;
-        const angle = calculateAngle(anchorPoint.px, anchorPoint.py, x, y)
-        if (angle >= -22.5 && angle < 22.5) {
-            cameraMovingDirection = 1;
-            playDirection = 0;
-            indexSpeedMultiplier = 0;
-        } else if (angle >= 22.5 && angle < 67.5) {
-            cameraMovingDirection = 1;
-            playDirection = -1;
-            indexSpeedMultiplier = calculateIndexSpeedMultiplierByDistance(dis);
-        } else if (angle >= 67.5 && angle < 112.5) {
-            cameraMovingDirection = 0;
-            playDirection = -1;
-            indexSpeedMultiplier = calculateIndexSpeedMultiplierByDistance(dis);
-        } else if (angle >= 112.5 && angle < 157.5) {
-            cameraMovingDirection = -1;
-            playDirection = -1;
-            indexSpeedMultiplier = calculateIndexSpeedMultiplierByDistance(dis);
-        } else if ((angle >= 157.5 && angle <= 180) || (angle >= -180 && angle < -157.5)) {
-            cameraMovingDirection = -1;
-            playDirection = 0;
-            indexSpeedMultiplier = 0;
-        } else if (angle >= -157.5 && angle < -112.5) {
-            cameraMovingDirection = -1;
-            playDirection = 1;
-            indexSpeedMultiplier = calculateIndexSpeedMultiplierByDistance(dis);
-        } else if (angle >= -112.5 && angle < -67.5) {
-            cameraMovingDirection = 0;
-            playDirection = 1;
-            indexSpeedMultiplier = calculateIndexSpeedMultiplierByDistance(dis);
-        } else {
-            cameraMovingDirection = 1;
-            playDirection = 1;
-            indexSpeedMultiplier = calculateIndexSpeedMultiplierByDistance(dis);
-        }
-        return {
-            indexSpeedMultiplier,
-            cameraMovingDirection,
-            playDirection
-        };
-    }
-
-    const calculateIndexSpeedMultiplierByDistance = (dis) => {
-        if (dis < 100) {
-            return 0;
-        }
-        if (dis >= 100 && dis < 200) {
-            return 1;
-        }
-        if (dis >= 200 && dis < 300) {
-            return 2;
-        }
-        if (dis >= 300 && dis < 400) {
-            return 4;
-        }
-        return 8;
-    }
+    }, [goToNextCamera, goToPrevCamera, goToPrevIndex, goToNextIndex, goPlay, enableJoyStickMode, indexIntervalId])
 
     useEffect(() => {
         if (indexIntervalId) {
@@ -324,39 +217,35 @@ const PlayPage = () => {
             setindexIntervalId(setInterval(() => goToPrevIndex(), Math.ceil(30 / joyStickParams.indexSpeedMultiplier)));
         }
         if (joyStickParams.cameraMovingDirection === 1) {
-            setcameraIntervalId(setInterval(() => goToNextCamera(), 500));
+            setcameraIntervalId(setInterval(() => goToNextCamera(), 200));
         } else if (joyStickParams.cameraMovingDirection === -1) {
-            setcameraIntervalId(setInterval(() => goToPrevCamera(), 500));
+            setcameraIntervalId(setInterval(() => goToPrevCamera(), 200));
         }
-    }, [joyStickParams])
+    }, [joyStickParams, goToNextCamera, goToNextIndex, goToPrevCamera, goToPrevIndex])
 
     useEffect(() => {
         // attach the event listener
         document.addEventListener('keydown', handleKeyPress);
-        // remove the event listener
-        document.addEventListener('mousemove', handleMouseMove);
-        document.addEventListener('mousedown', handleMouseDown);
-        document.addEventListener('mouseup', handleMouseUp);
-        //document.addEventListener('mouseout', handleMouseOut);
         return () => {
             document.removeEventListener('keydown', handleKeyPress);
-            document.removeEventListener('mousemove', handleMouseMove);
-            document.removeEventListener('mousedown', handleMouseDown);
-            document.removeEventListener('mouseup', handleMouseUp);
-            //document.removeEventListener('mouseout', handleMouseOut);
         };
     }, [handleKeyPress]);
 
     return (
         <>
-            <Container onMouseOut={handleMouseOut}>
+            <Container>
                 <Header title={title} playerName={playerName} />
                 <Grid container alignItems="center" spacing={2}>
                     <Grid item xs={3}>
-                        <Sidebar setTitle={setTitle} />
+                        <Sidebar setCurrentTechnique={setCurrentTechnique} />
                     </Grid>
                     <Grid item xs={9}>
-                        <Displayer imageSrc={getCurrentImageUrl()} disableAll={enableJoyStickMode} />
+                        <Displayer
+                            imageSrc={getCurrentImageUrl()}
+                            enableJoyStickMode={enableJoyStickMode}
+                            setjoyStickParams={setjoyStickParams}
+                            resetjoyStickParams={resetjoyStickParams}
+                        />
                     </Grid>
                     <Grid xsOffset={3} xs={9}>
                         <ControlPanel
@@ -370,18 +259,12 @@ const PlayPage = () => {
                             canGoPrevCamera={canGoPrevCamera}
                             canGoNextIndex={canGoNextIndex}
                             canGoPrevIndex={canGoPrevIndex}
-                            disableAll={enableJoyStickMode}
+                            enableJoyStickMode={enableJoyStickMode}
+                            joyStickParams={joyStickParams}
                         />
                     </Grid>
                 </Grid>
                 <Switch checked={enableJoyStickMode} />
-                <Typography variant='h6' color='white'>
-                    Multiplier: {joyStickParams.indexSpeedMultiplier}
-                    <br />
-                    CameraDirection: {joyStickParams.cameraMovingDirection}
-                    <br />
-                    PlayDirection: {joyStickParams.playDirection}
-                </Typography>
             </Container>
         </>
     )

@@ -1,6 +1,6 @@
 import { Grid, Typography } from '@mui/material'
 import React from 'react'
-import KillerspinLogo from '../asserts/images/killerspin-logo.svg';
+import KillerspinLogo from '../../asserts/images/killerspin-logo.svg';
 
 const Header = ({ title, playerName }) => {
     return (

@@ -7,6 +7,7 @@ import {
     Route
 } from "react-router-dom";
 import PlayPage from './pages/PlayPage';
+import LandingPage from './pages/LandingPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -14,6 +15,9 @@ root.render(
         <Router basename={`/${process.env.PUBLIC_URL}`}>
             <Switch>
                 <Route exact path="/">
+                    <LandingPage />
+                </Route>
+                <Route exact path="/technique/:player">
                     <PlayPage />
                 </Route>
             </Switch>

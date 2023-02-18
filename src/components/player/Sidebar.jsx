@@ -44,27 +44,27 @@ const Holder = styled(Box)({
     }
 })
 
-const Sidebar = ({ setTitle }) => {
+const Sidebar = ({ setCurrentTechnique }) => {
     const handleClick = (e) => {
-        setTitle(e.target.innerText);
+        setCurrentTechnique(e.target.value)
     }
     return (
         <Holder>
             <Stack spacing={1}>
-                <Item onClick={handleClick}>FH Loop off topspin</Item>
-                <Item onClick={handleClick}>FH Loop off underspin</Item>
-                <Item onClick={handleClick}>FH Counter</Item>
-                <Item onClick={handleClick}>FH Push</Item>
-                <Item onClick={handleClick}>FH Passive Block</Item>
-                <Item onClick={handleClick}>FH Active Block</Item>
-                <Item onClick={handleClick}>FH Lob</Item>
-                <Item onClick={handleClick}>BH Loop off topspin</Item>
-                <Item onClick={handleClick}>BH Loop off underspin</Item>
-                <Item onClick={handleClick}>BH Counter</Item>
-                <Item onClick={handleClick}>BH Push</Item>
-                <Item onClick={handleClick}>BH Passive Block</Item>
-                <Item onClick={handleClick}>BH Active Block</Item>
-                <Item onClick={handleClick}>BH Lob</Item>
+                <Item onClick={handleClick} value='fhLoopOffBlock' >FH Loop Off Block</Item>
+                <Item onClick={handleClick} value='bhLoopOffPush' >BH Loop Off Push</Item>
+                <Item onClick={handleClick} value='bhLoopOffPush'>FH Counter</Item>
+                <Item onClick={handleClick} value='fhLoopOffBlock'>FH Push</Item>
+                <Item onClick={handleClick} value='bhLoopOffPush'>FH Passive Block</Item>
+                <Item onClick={handleClick} value='bhLoopOffPush'>FH Active Block</Item>
+                <Item onClick={handleClick} value='bhLoopOffPush'>FH Lob</Item>
+                <Item onClick={handleClick} value='bhLoopOffPush'>BH Loop off topspin</Item>
+                <Item onClick={handleClick} value='bhLoopOffPush'>BH Loop off underspin</Item>
+                <Item onClick={handleClick} value='bhLoopOffPush'>BH Counter</Item>
+                <Item onClick={handleClick} value='bhLoopOffPush'>BH Push</Item>
+                <Item onClick={handleClick} value='bhLoopOffPush'>BH Passive Block</Item>
+                <Item onClick={handleClick} value='bhLoopOffPush'>BH Active Block</Item>
+                <Item onClick={handleClick} value='bhLoopOffPush'>BH Lob</Item>
             </Stack>
         </Holder>
     )
