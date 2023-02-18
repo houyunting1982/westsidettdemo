@@ -1,14 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.9d2c4429.css",
-    "main.js": "/static/js/main.dfea3adc.js",
+    "main.css": "/static/css/main.50a95ce8.css",
+    "main.js": "/static/js/main.93b05eb3.js",
+    "static/media/bg.jpg": "/static/media/bg.7abacbf3037804f4cc5c.jpg",
     "static/media/killerspin-logo.svg": "/static/media/killerspin-logo.f3e2b72ca87589c262363d3f57e8a7f5.svg",
     "index.html": "/index.html",
-    "main.9d2c4429.css.map": "/static/css/main.9d2c4429.css.map",
-    "main.dfea3adc.js.map": "/static/js/main.dfea3adc.js.map"
+    "main.50a95ce8.css.map": "/static/css/main.50a95ce8.css.map",
+    "main.93b05eb3.js.map": "/static/js/main.93b05eb3.js.map"
   },
   "entrypoints": [
-    "static/css/main.9d2c4429.css",
-    "static/js/main.dfea3adc.js"
+    "static/css/main.50a95ce8.css",
+    "static/js/main.93b05eb3.js"
   ]
 }
